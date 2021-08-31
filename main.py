@@ -40,6 +40,7 @@ canvas1.config(bg="black")
 img = PhotoImage(file=os.getcwd()+ '\\typing.png')
 canvas1.create_image(950, 500, image=img)
 
+#test
 
 welcome()
 window1.mainloop()
