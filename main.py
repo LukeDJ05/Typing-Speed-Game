@@ -37,10 +37,9 @@ canvas1 = Canvas(window1, width=width, height=height)
 canvas1.pack()
 canvas1.config(bg="black")
 
+# LOGO ON START PAGE #
 img = PhotoImage(file=os.getcwd()+ '\\typing.png')
 canvas1.create_image(950, 500, image=img)
-
-#test
 
 welcome()
 window1.mainloop()
