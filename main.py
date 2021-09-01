@@ -1,9 +1,9 @@
 from tkinter import Tk, Canvas, PhotoImage, Button, Label
-import random
 from tkinter.constants import W
 import tkinter.font as tkFont
-import time
 import os
+import time
+
 
 def welcome():
     global start_button, controls_button, results_button, main_msg, sub_msg
@@ -13,7 +13,7 @@ def welcome():
                                    font=textFont)
 
     start_button = Button(window1, text='Start', bg='grey', font='Arial, \
-                          80', activebackground='orange', activeforeground='white')
+                          80', activebackground='orange', activeforeground='white', command=startGame)
     start_button.pack()
     start_button.place(x=800, y=850)
 
@@ -22,7 +22,7 @@ def welcome():
 
 def setWindowDimensions(w, h):
     window1 = Tk()
-    window1.title("Typing Speed Test")
+    window1.title("Typing Speed Game")
     ws = window1.winfo_screenwidth()
     hs = window1.winfo_screenheight()
     x = (ws/2) - (w/2)
@@ -30,59 +30,43 @@ def setWindowDimensions(w, h):
     window1.geometry('%dx%d+%d+%d' % (w, h, x, y))
     return window1
 
+def startGame():
+    global main_msg, start_button
+    canvas1.delete(main_msg)
+    start_button.place(x=3000, y=3000)
+    canvas1.move(img2, 0, -130)
 
-# # CANVAS DETAILS #
-# width = 1920
-# height = 1080
-# window1 = setWindowDimensions(width, height)
-# canvas1 = Canvas(window1, width=width, height=height)
-# canvas1.pack()
-# canvas1.config(bg="black")
+    time.sleep(0.2)
+    timer_msg = canvas1.create_text(950, 870, text='3',
+                                    fill='orange', anchor='center',
+                                    font="Arial, 300")
+    canvas1.update()
+    time.sleep(1)
+    canvas1.itemconfig(timer_msg, text='2')
+    canvas1.update()
+    time.sleep(1)
+    canvas1.itemconfig(timer_msg, text='1')
+    canvas1.update()
+    time.sleep(1)
+    window1.destroy()
+    import gameLogic.py
+    return
 
-# # LOGO ON START PAGE #
-# img = PhotoImage(file=os.getcwd()+ '\\typing.png')
-# canvas1.create_image(950, 500, image=img)
+# CANVAS DETAILS #
+width = 1920
+height = 1080
+window1 = setWindowDimensions(width, height)
+canvas1 = Canvas(window1, width=width, height=height)
+canvas1.pack()
+canvas1.config(bg="black")
 
-# welcome()
-# window1.mainloop()
+# LOGO ON START PAGE #
+img = PhotoImage(file=os.getcwd()+ '\\typing.png')
+img2 = canvas1.create_image(950, 500, image=img)
 
-file = open("words.txt", "rt")
-dictionaryWords = file.read().split("\n")
-file.close()
+welcome()
+window1.mainloop()
 
-wordsAnswered = False
-score = 0
-possibilities = 0
-
-while wordsAnswered is False:
-    wordsTest = []
-    i = 0
-    str = " "
-    while i < 3:
-        wordsTest.append(dictionaryWords[random.randint(0, len(dictionaryWords))])
-        i+=1
-    print(str.join(wordsTest))
-    wordsAnswered = True
-    attempt = input()
-    attemptedAnswers = attempt.split()
-    j = 0
-    for j in range(3):
-        while True:
-            try:
-                if attemptedAnswers[j] == wordsTest[j]:
-                    score+=1
-                    print(score)
-                possibilities+=1
-                break
-            except IndexError:
-                print("Please attempt all 3 words")
-                attempt = input()
-                attemptedAnswers = attempt.split()
-                continue
-        wordsAnswered = False
-
-
-    
 
 
 
