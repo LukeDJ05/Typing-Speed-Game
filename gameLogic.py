@@ -25,6 +25,11 @@ canvas.pack()
 canvas.config(bg="black")
 img = PhotoImage(file=os.getcwd()+ '\\typing.png').subsample(3)
 img2 = canvas.create_image(1800, 110, image=img)
+canvas.create_rectangle(10, 105, 140, 115,
+    outline="white", fill="#FF5F1F")
+canvas.create_text(920, 115, text="Typing Speed Game", fill='#FF5F1F',
+                              anchor='center', font="Verdana, 120",
+                              justify="center")
 
 
 def initialiseGame():
@@ -32,39 +37,52 @@ def initialiseGame():
     dictionaryWords = file.read().split("\n")
     file.close()
     wordsAnswered = False
-    score = 0
-    possibilities = 0
+
     timeout = 60
     timeStart = time.time()
 
+    while wordsAnswered is False and  time.time() < timeStart + timeout:
+        wordsTest = []
+        i = 0
+        str = " "
+        while i < 3:
+            wordsTest.append(dictionaryWords[random.randint(0, len(dictionaryWords))])
+            i+=1
+        testWords = canvas.create_text(920, 360, text=str.join(wordsTest), fill='white',
+                                anchor='center', font="Verdana, 50",
+                                justify="center")
+        wordsAnswered = True
+        attempt = input()
+        attemptedAnswers = attempt.split()
+        j = 0
+        for j in range(3):
+            while True:
+                try:
+                    if attemptedAnswers[j] == wordsTest[j]:
+                        score+=1
+                        print(score)
+                    # possibilities+=1
+                    break
+                except IndexError:
+                    print("Please attempt all 3 words")
+                    attempt = input()
+                    attemptedAnswers = attempt.split()
+                    continue
+            wordsAnswered = False
+
+
+
+
+score = 0
+possibilities = 0
+
+correctScore = canvas.create_text(75, 65, text=score, fill='#32CD32',
+                              anchor='center', font="Arial, 50",
+                              justify="center")
+possibleScore = canvas.create_text(75, 160, text=possibilities, fill='red',
+                              anchor='center', font="Arial, 50",
+                              justify="center")
+
+
+initialiseGame()
 window.mainloop()
-
-
-
-
-# while wordsAnswered is False and  time.time() < timeStart + timeout:
-#     wordsTest = []
-#     i = 0
-#     str = " "
-#     while i < 3:
-#         wordsTest.append(dictionaryWords[random.randint(0, len(dictionaryWords))])
-#         i+=1
-#     print(str.join(wordsTest))
-#     wordsAnswered = True
-#     attempt = input()
-#     attemptedAnswers = attempt.split()
-#     j = 0
-#     for j in range(3):
-#         while True:
-#             try:
-#                 if attemptedAnswers[j] == wordsTest[j]:
-#                     score+=1
-#                     print(score)
-#                 possibilities+=1
-#                 break
-#             except IndexError:
-#                 print("Please attempt all 3 words")
-#                 attempt = input()
-#                 attemptedAnswers = attempt.split()
-#                 continue
-#         wordsAnswered = False
