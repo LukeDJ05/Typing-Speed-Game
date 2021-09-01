@@ -1,4 +1,6 @@
 from tkinter import Tk, Canvas, PhotoImage, Button, Label
+import random
+from tkinter.constants import W
 import tkinter.font as tkFont
 import time
 import os
@@ -29,18 +31,58 @@ def setWindowDimensions(w, h):
     return window1
 
 
-# CANVAS DETAILS #
-width = 1920
-height = 1080
-window1 = setWindowDimensions(width, height)
-canvas1 = Canvas(window1, width=width, height=height)
-canvas1.pack()
-canvas1.config(bg="black")
+# # CANVAS DETAILS #
+# width = 1920
+# height = 1080
+# window1 = setWindowDimensions(width, height)
+# canvas1 = Canvas(window1, width=width, height=height)
+# canvas1.pack()
+# canvas1.config(bg="black")
 
-# LOGO ON START PAGE #
-img = PhotoImage(file=os.getcwd()+ '\\typing.png')
-canvas1.create_image(950, 500, image=img)
+# # LOGO ON START PAGE #
+# img = PhotoImage(file=os.getcwd()+ '\\typing.png')
+# canvas1.create_image(950, 500, image=img)
 
-welcome()
-window1.mainloop()
+# welcome()
+# window1.mainloop()
+
+file = open("words.txt", "rt")
+dictionaryWords = file.read().split("\n")
+file.close()
+
+wordsAnswered = False
+score = 0
+possibilities = 0
+
+while wordsAnswered is False:
+    wordsTest = []
+    i = 0
+    str = " "
+    while i < 3:
+        wordsTest.append(dictionaryWords[random.randint(0, len(dictionaryWords))])
+        i+=1
+    print(str.join(wordsTest))
+    wordsAnswered = True
+    attempt = input()
+    attemptedAnswers = attempt.split()
+    j = 0
+    for j in range(3):
+        while True:
+            try:
+                if attemptedAnswers[j] == wordsTest[j]:
+                    score+=1
+                    print(score)
+                possibilities+=1
+                break
+            except IndexError:
+                print("Please attempt all 3 words")
+                attempt = input()
+                attemptedAnswers = attempt.split()
+                continue
+        wordsAnswered = False
+
+
+    
+
+
 
