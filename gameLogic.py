@@ -1,9 +1,71 @@
-from tkinter import Tk, Canvas, PhotoImage, Button, Label
+from tkinter import *
 import random
 from tkinter.constants import W
 import tkinter.font as tkFont
 import time
 import os
+
+def initialiseGame():
+    global wordsTest
+    file = open("words.txt", "rt")
+    dictionaryWords = file.read().split("\n")
+    file.close()
+    wordsAnswered = False
+    timeout = 60
+    timeStart = time.time()
+
+    while wordsAnswered is False and  time.time() < timeStart + timeout:
+        wordsTest = []
+        i = 0
+        str = " "
+        while i < 3:
+            wordsTest.append(dictionaryWords[random.randint(0, len(dictionaryWords))])
+            i+=1
+        testWords = canvas.create_text(920, 360, text=str.join(wordsTest), fill='white',
+                                anchor='center', font="Verdana, 50",
+                                justify="center")
+        wordsAnswered = True
+        getText()
+        
+
+def getText():
+    global entry1, wordsTest, score, possibilities
+    entry1 = Entry(window, justify="center", font="Ariel, 50") 
+    canvas.create_window(920, 500, height=100, width=1500, window=entry1)
+    entry1.focus_set()
+    while True:
+        attempt = entry1.get()
+        window.update()
+        if attempt.count(' ') == 3:
+            break
+        else:
+            continue
+    attemptedAnswers = attempt.split()
+    j = 0
+    for j in range(3):
+        while True:
+            try:
+                if attemptedAnswers[j] == wordsTest[j]:
+                    score+=1
+                    print(score)
+                    possibilities+=1
+                    break
+            except IndexError:
+                entry1 = Entry(window, justify="center", font="Ariel, 50") 
+                canvas.create_window(920, 500, height=100, width=1500, window=entry1)
+                entry1.focus_set()
+                while True:
+                    attempt = entry1.get()
+                    window.update()
+                    if attempt.count(' ') == 3:
+                        break
+                    else:
+                        continue
+                attemptedAnswers = attempt.split()
+                continue
+        wordsAnswered = False
+                       
+  
 
 
 def setWindowDimensions(w, h):
@@ -30,46 +92,6 @@ canvas.create_rectangle(10, 105, 140, 115,
 canvas.create_text(920, 115, text="Typing Speed Game", fill='#FF5F1F',
                               anchor='center', font="Verdana, 120",
                               justify="center")
-
-
-def initialiseGame():
-    file = open("words.txt", "rt")
-    dictionaryWords = file.read().split("\n")
-    file.close()
-    wordsAnswered = False
-
-    timeout = 60
-    timeStart = time.time()
-
-    while wordsAnswered is False and  time.time() < timeStart + timeout:
-        wordsTest = []
-        i = 0
-        str = " "
-        while i < 3:
-            wordsTest.append(dictionaryWords[random.randint(0, len(dictionaryWords))])
-            i+=1
-        testWords = canvas.create_text(920, 360, text=str.join(wordsTest), fill='white',
-                                anchor='center', font="Verdana, 50",
-                                justify="center")
-        wordsAnswered = True
-        attempt = input()
-        attemptedAnswers = attempt.split()
-        j = 0
-        for j in range(3):
-            while True:
-                try:
-                    if attemptedAnswers[j] == wordsTest[j]:
-                        score+=1
-                        print(score)
-                    # possibilities+=1
-                    break
-                except IndexError:
-                    print("Please attempt all 3 words")
-                    attempt = input()
-                    attemptedAnswers = attempt.split()
-                    continue
-            wordsAnswered = False
-
 
 
 
