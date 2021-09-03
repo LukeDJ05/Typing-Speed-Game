@@ -6,14 +6,42 @@ import time
 import os
 
 def initialiseGame():
-    global wordsTest, entry1, textbox, timeStart, correctlyAnswered, timeFinished
+    global wordsTest, entry1, textbox, timeStart, correctlyAnswered, timeFinished, score, possibilities, correctScore, timeKeeping, possibleScore
     file = open("words.txt", "rt")
     dictionaryWords = file.read().split("\n")
     file.close()
     wordsAnswered = False
-    timeout = 5
+    timeout = 60
     timeStart = time.time()
     correctlyAnswered = []
+    score = 0
+    possibilities = 0
+    img = PhotoImage(file=os.getcwd()+ '\\typing.png').subsample(3)
+    img2 = canvas.create_image(1800, 110, image=img)
+    canvas.create_rectangle(10, 105, 140, 115,
+    outline="white", fill="#FF5F1F")
+    restartButton = Button(window, text='Restart', bg='grey', font='Arial, \
+                          50', activebackground='green', activeforeground='white', width="10", command=restart)
+    restartButton.pack()
+    restartButton.place(x=550, y=920)
+    quitButton = Button(window, text='Quit', bg='grey', font='Arial, \
+                        50', activebackground='red', activeforeground='white', width="10", command=quitGame)
+    quitButton.pack()
+    quitButton.place(x=950, y=920)
+    canvas.create_text(920, 115, text="Typing Speed Game", fill='#FF5F1F',
+                              anchor='center', font="Verdana, 120",
+                              justify="center")
+
+    correctScore = canvas.create_text(75, 65, text=score, fill='#32CD32',
+                              anchor='center', font="Arial, 50",
+                              justify="center")
+    possibleScore = canvas.create_text(75, 160, text=possibilities, fill='red',
+                              anchor='center', font="Arial, 50",
+                              justify="center")
+
+    timeKeeping = canvas.create_text(1810, 1000, text="0", fill='white',
+                              anchor='center', font="Arial, 90",
+                              justify="center")
 
     while wordsAnswered is False and  time.time() < timeStart + timeout:
         window.update()
@@ -75,7 +103,6 @@ def displayResults():
     canvas.create_text(920, 515, text="You attempted " + str(possibilities) + " words\nYou correctly entered " + str(score) + " words\nYou correctly typed " + str(len(totalChars)) + " characters\n Your characters typed per second was " + str("{:.2f}".format(len(totalChars) / timeFinished)), fill='white',
                               anchor='center', font="Verdana, 70",
                               justify="center")
-
     return
 
 
@@ -89,6 +116,15 @@ def setWindowDimensions(w, h):
     window.geometry('%dx%d+%d+%d' % (w, h, x, y))
     return window
 
+def restart():
+    canvas.delete("all")
+    initialiseGame()
+    return
+
+def quitGame():
+    window.destroy()
+    return
+
 # CANVAS DETAILS #
 width = 1920
 height = 1080
@@ -96,29 +132,6 @@ window = setWindowDimensions(width, height)
 canvas = Canvas(window, width=width, height=height)
 canvas.pack()
 canvas.config(bg="black")
-img = PhotoImage(file=os.getcwd()+ '\\typing.png').subsample(3)
-img2 = canvas.create_image(1800, 110, image=img)
-canvas.create_rectangle(10, 105, 140, 115,
-    outline="white", fill="#FF5F1F")
-canvas.create_text(920, 115, text="Typing Speed Game", fill='#FF5F1F',
-                              anchor='center', font="Verdana, 120",
-                              justify="center")
-
-
-
-score = 0
-possibilities = 0
-
-correctScore = canvas.create_text(75, 65, text=score, fill='#32CD32',
-                              anchor='center', font="Arial, 50",
-                              justify="center")
-possibleScore = canvas.create_text(75, 160, text=possibilities, fill='red',
-                              anchor='center', font="Arial, 50",
-                              justify="center")
-
-timeKeeping = canvas.create_text(1810, 1000, text="0", fill='white',
-                              anchor='center', font="Arial, 90",
-                              justify="center")
 
 
 initialiseGame()
