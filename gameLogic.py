@@ -6,12 +6,12 @@ import time
 import os
 
 def initialiseGame():
-    global wordsTest, entry1, textbox
+    global wordsTest, entry1, textbox, timeStart
     file = open("words.txt", "rt")
     dictionaryWords = file.read().split("\n")
     file.close()
     wordsAnswered = False
-    timeout = 5
+    timeout = 60
     timeStart = time.time()
 
     while wordsAnswered is False and  time.time() < timeStart + timeout:
@@ -28,20 +28,21 @@ def initialiseGame():
         wordsAnswered = True
         getText()
         canvas.delete(testWords)
+        canvas.delete(textbox)
         canvas.update()
         wordsAnswered = False
-    canvas.delete(textbox)
     displayResults()
         
 
 def getText():
-    global entry1, wordsTest, score, possibilities, correctScore, possibleScore, textbox
+    global entry1, wordsTest, score, possibilities, correctScore, possibleScore, textbox, timeStart, timeKeeping
     entry1 = Entry(window, justify="center", font="Ariel, 50") 
     textbox = canvas.create_window(920, 500, height=100, width=1500, window=entry1)
     entry1.focus_set()
     while True:
         attempt = entry1.get()
         window.update()
+        canvas.itemconfig(timeKeeping, text=int(time.time() - timeStart))
         if attempt.count(' ') == 3:
             break
         else:
@@ -63,12 +64,15 @@ def getText():
                     break
             except IndexError:
                 attemptedAnswers.append("null")
-                print(attemptedAnswers)
                 continue
  
- def displayResults():
-     
-     return
+def displayResults():
+    global score, possibilities
+    canvas.create_text(920, 515, text="You attempted " + str(possibilities) + " words\nYou correctly entered " + str(score), fill='white',
+                              anchor='center', font="Verdana, 70",
+                              justify="center")
+    ######################################################################################################################################################### " words\n Your CPM is " + str("{:.2f}".format(score / 60))
+    return
 
 
 def setWindowDimensions(w, h):
@@ -106,6 +110,10 @@ correctScore = canvas.create_text(75, 65, text=score, fill='#32CD32',
                               justify="center")
 possibleScore = canvas.create_text(75, 160, text=possibilities, fill='red',
                               anchor='center', font="Arial, 50",
+                              justify="center")
+
+timeKeeping = canvas.create_text(1810, 1000, text="0", fill='white',
+                              anchor='center', font="Arial, 90",
                               justify="center")
 
 
