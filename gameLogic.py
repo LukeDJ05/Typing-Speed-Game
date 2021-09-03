@@ -6,12 +6,12 @@ import time
 import os
 
 def initialiseGame():
-    global wordsTest, entry1
+    global wordsTest, entry1, textbox
     file = open("words.txt", "rt")
     dictionaryWords = file.read().split("\n")
     file.close()
     wordsAnswered = False
-    timeout = 60
+    timeout = 5
     timeStart = time.time()
 
     while wordsAnswered is False and  time.time() < timeStart + timeout:
@@ -30,12 +30,14 @@ def initialiseGame():
         canvas.delete(testWords)
         canvas.update()
         wordsAnswered = False
+    canvas.delete(textbox)
+    displayResults()
         
 
 def getText():
-    global entry1, wordsTest, score, possibilities
+    global entry1, wordsTest, score, possibilities, correctScore, possibleScore, textbox
     entry1 = Entry(window, justify="center", font="Ariel, 50") 
-    canvas.create_window(920, 500, height=100, width=1500, window=entry1)
+    textbox = canvas.create_window(920, 500, height=100, width=1500, window=entry1)
     entry1.focus_set()
     while True:
         attempt = entry1.get()
@@ -51,27 +53,22 @@ def getText():
             try:
                 if attemptedAnswers[j] == wordsTest[j]:
                     score+=1
-                    print(score)
-                    possibilities+=1                                                ################################# Error when words spelt wrong ####################################
+                    possibilities+=1
+                    canvas.itemconfig(correctScore, text=int(score))
+                    canvas.itemconfig(possibleScore, text=int(possibilities))
                     break
                 else:
                     possibilities+=1
+                    canvas.itemconfig(possibleScore, text=int(possibilities))
+                    break
             except IndexError:
-                # entry1 = Entry(window, justify="center", font="Ariel, 50") 
-                # canvas.create_window(920, 500, height=100, width=1500, window=entry1)
-                # entry1.focus_set()
-                # while True:
-                #     attempt = entry1.get()
-                #     window.update()
-                #     if attempt.count(' ') == 3:
-                #         break
-                #     else:
-                #         continue
-                # attemptedAnswers = attempt.split()
                 attemptedAnswers.append("null")
                 print(attemptedAnswers)
                 continue
  
+ def displayResults():
+     
+     return
 
 
 def setWindowDimensions(w, h):
