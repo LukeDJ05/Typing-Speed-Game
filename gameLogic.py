@@ -6,13 +6,14 @@ import time
 import os
 
 def initialiseGame():
-    global wordsTest, entry1, textbox, timeStart
+    global wordsTest, entry1, textbox, timeStart, correctlyAnswered, timeFinished
     file = open("words.txt", "rt")
     dictionaryWords = file.read().split("\n")
     file.close()
     wordsAnswered = False
-    timeout = 60
+    timeout = 5
     timeStart = time.time()
+    correctlyAnswered = []
 
     while wordsAnswered is False and  time.time() < timeStart + timeout:
         window.update()
@@ -31,11 +32,12 @@ def initialiseGame():
         canvas.delete(textbox)
         canvas.update()
         wordsAnswered = False
+    timeFinished = time.time() - timeStart
     displayResults()
         
 
 def getText():
-    global entry1, wordsTest, score, possibilities, correctScore, possibleScore, textbox, timeStart, timeKeeping
+    global entry1, wordsTest, score, possibilities, correctScore, possibleScore, textbox, timeStart, timeKeeping, correctlyAnswered
     entry1 = Entry(window, justify="center", font="Ariel, 50") 
     textbox = canvas.create_window(920, 500, height=100, width=1500, window=entry1)
     entry1.focus_set()
@@ -57,6 +59,7 @@ def getText():
                     possibilities+=1
                     canvas.itemconfig(correctScore, text=int(score))
                     canvas.itemconfig(possibleScore, text=int(possibilities))
+                    correctlyAnswered.append(attemptedAnswers[j])
                     break
                 else:
                     possibilities+=1
@@ -67,11 +70,12 @@ def getText():
                 continue
  
 def displayResults():
-    global score, possibilities
-    canvas.create_text(920, 515, text="You attempted " + str(possibilities) + " words\nYou correctly entered " + str(score), fill='white',
+    global score, possibilities, correctlyAnswered, timeFinished
+    totalChars = "".join(correctlyAnswered)
+    canvas.create_text(920, 515, text="You attempted " + str(possibilities) + " words\nYou correctly entered " + str(score) + " words\nYou correctly typed " + str(len(totalChars)) + " characters\n Your characters typed per second was " + str("{:.2f}".format(len(totalChars) / timeFinished)), fill='white',
                               anchor='center', font="Verdana, 70",
                               justify="center")
-    ######################################################################################################################################################### " words\n Your CPM is " + str("{:.2f}".format(score / 60))
+
     return
 
 

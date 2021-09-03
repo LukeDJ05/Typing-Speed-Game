@@ -52,7 +52,7 @@ def startGame():
     import gameLogic.py
     return
 
-# CANVAS DETAILS #
+# CANVAS DETAILS #unsh
 width = 1920
 height = 1080
 window1 = setWindowDimensions(width, height)
